@@ -10,8 +10,9 @@ const readAllTalkers = async () => {
 
 const writeNewTalkers = async (newTalker) => {
   try {
-    const talkers = readAllTalkers();
-    const insertion = await fs.writeFile(filename, JSON.stringify([...talkers, newTalker]));
+    const talkers = await readAllTalkers();
+    talkers.push(newTalker);
+    const insertion = await fs.writeFile(filename, JSON.stringify(talkers));
     return insertion;
   } catch (e) {
     console.log('erro em inserir novo talker', e);

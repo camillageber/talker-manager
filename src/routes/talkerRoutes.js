@@ -2,7 +2,15 @@ const express = require('express');
 const {
   getAllTalkers,
   getTalkerById,
+  writeNewTalkers,
 } = require('../utils/readAndWriteTalkers');
+const {
+  tokenValidation,
+  nameValidation,
+  ageValidation,
+  watchedAtValidation,
+  talkValidation,
+} = require('../middlewares/talkersValidation');
 
 const routerTalkers = express.Router();
 
@@ -23,5 +31,23 @@ routerTalkers.get('/', async (req, res) => {
   const allTalkers = await getAllTalkers();
   res.status(200).json(allTalkers);
 });
+
+routerTalkers.post(
+  '/',
+  tokenValidation,
+  ageValidation,
+  nameValidation,
+  talkValidation,
+  watchedAtValidation,
+  async (req, res) => {
+    const talker = req.body;
+    const talkers = await getAllTalkers();
+
+    const newIdTalker = Number(talkers.slice(-1)[0].id) + 1; /* fonte: https://discuss.codecademy.com/t/advanced-slice-functionality-array-slice-1-0/528432 */
+    talker.id = newIdTalker;
+    await writeNewTalkers(talker);
+    res.status(201).json(talker);
+  },
+);
 
 module.exports = routerTalkers;
