@@ -6,6 +6,7 @@ const {
 
 const routerTalkers = express.Router();
 
+// rota para trazer os palestrantes por id - req 2
 routerTalkers.get('/:id', async (req, res) => {
   const { id } = req.params;
   const talkerId = await getTalkerById(id);
