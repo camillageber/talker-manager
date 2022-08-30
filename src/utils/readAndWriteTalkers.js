@@ -8,6 +8,16 @@ const readAllTalkers = async () => {
   return JSON.parse(dataTalkers);
 };
 
+const writeNewTalkers = async (newTalker) => {
+  try {
+    const talkers = readAllTalkers();
+    const insertion = await fs.writeFile(filename, JSON.stringify([...talkers, newTalker]));
+    return insertion;
+  } catch (e) {
+    console.log('erro em inserir novo talker', e);
+  }
+};
+
 const getAllTalkers = async () => {
   const allTalkers = await readAllTalkers();
   if (!allTalkers) {
@@ -26,4 +36,5 @@ module.exports = {
   readAllTalkers,
   getAllTalkers,
   getTalkerById,
+  writeNewTalkers,
 };
