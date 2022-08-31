@@ -33,6 +33,14 @@ const getTalkerById = async (id) => {
   return talkerId;
 };
 
+const updateTalkers = async (talkers) => {
+  try {
+    await fs.writeFile(filename, JSON.stringify(talkers));
+  } catch (error) {
+    console.log('não atualizou', error);
+  }
+};
+
 // lógica utilizada na aula 22.4 - turma 21/A:
 const changeTalker = async (talker, id) => {
   try {
@@ -48,7 +56,7 @@ const changeTalker = async (talker, id) => {
         changedTalker = arrayTalkers[i];
       }
     }
-    await fs.writeFile(filename, JSON.stringify(arrayTalkers));
+    await updateTalkers(arrayTalkers);
     return changedTalker;
   } catch (error) {
     console.log('Erro em edição', error);
@@ -61,4 +69,5 @@ module.exports = {
   getTalkerById,
   writeNewTalkers,
   changeTalker,
+  updateTalkers,
 };

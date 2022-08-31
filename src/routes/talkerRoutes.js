@@ -1,10 +1,11 @@
-// const fs = require('fs');
 const express = require('express');
 const {
   getAllTalkers,
   getTalkerById,
   writeNewTalkers,
   changeTalker,
+  readAllTalkers,
+  updateTalkers,
 } = require('../utils/readAndWriteTalkers');
 const {
   tokenValidation,
@@ -73,5 +74,14 @@ routerTalkers.put(
     return res.status(200).json(changedTalker);
   },
 );
+
+// rota para deletar um talker do json - req 7
+routerTalkers.delete('/:id', tokenValidation, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readAllTalkers();
+  const deletedTalker = talkers.filter((talker) => talker.id !== Number(id));
+  await updateTalkers(deletedTalker);
+  return res.sendStatus(204);
+});
 
 module.exports = routerTalkers;
