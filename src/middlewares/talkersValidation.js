@@ -11,7 +11,6 @@ const tokenValidation = async (req, res, next) => {
 
   next();
 };
-// authorization === undefined || authorization === ''
 
 const nameValidation = (req, res, next) => {
   const { name } = req.body;

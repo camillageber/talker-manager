@@ -1,8 +1,10 @@
+// const fs = require('fs');
 const express = require('express');
 const {
   getAllTalkers,
   getTalkerById,
   writeNewTalkers,
+  changeTalker,
 } = require('../utils/readAndWriteTalkers');
 const {
   tokenValidation,
@@ -32,6 +34,7 @@ routerTalkers.get('/', async (req, res) => {
   res.status(200).json(allTalkers);
 });
 
+// rota para inserir um novo talker em POST /talker, com validações - req 5
 routerTalkers.post(
   '/',
   tokenValidation,
@@ -47,6 +50,27 @@ routerTalkers.post(
     talker.id = newIdTalker;
     await writeNewTalkers(talker);
     res.status(201).json(talker);
+  },
+);
+
+// rota para modificar dados de um talker, sem alterar o id - req 6
+routerTalkers.put(
+  '/:id',
+  tokenValidation,
+  ageValidation,
+  nameValidation,
+  talkValidation,
+  watchedAtValidation,
+  async (req, res) => {
+    let newTalker = req.body;
+
+    const { id } = req.params;
+    newTalker = {
+      ...newTalker,
+    };
+  
+    const changedTalker = await changeTalker(newTalker, id);
+    return res.status(200).json(changedTalker);
   },
 );
 

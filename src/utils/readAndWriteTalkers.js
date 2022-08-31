@@ -33,9 +33,32 @@ const getTalkerById = async (id) => {
   return talkerId;
 };
 
+// lógica utilizada na aula 22.4 - turma 21/A:
+const changeTalker = async (talker, id) => {
+  try {
+    const arrayTalkers = await readAllTalkers();
+    console.log(arrayTalkers);
+    let changedTalker;
+    
+    for (let i = 0; i < arrayTalkers.length; i += 1) {
+      if (arrayTalkers[i].id === Number(id)) {
+        arrayTalkers[i].name = talker.name;
+        arrayTalkers[i].age = talker.age;
+        arrayTalkers[i].talk = talker.talk;
+        changedTalker = arrayTalkers[i];
+      }
+    }
+    await fs.writeFile(filename, JSON.stringify(arrayTalkers));
+    return changedTalker;
+  } catch (error) {
+    console.log('Erro em edição', error);
+  }
+};
+
 module.exports = {
   readAllTalkers,
   getAllTalkers,
   getTalkerById,
   writeNewTalkers,
+  changeTalker,
 };
